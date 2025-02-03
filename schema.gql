@@ -1,0 +1,62 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""expenses"""
+type Expense {
+  createdBy: ID!
+  createdDate: DateTime!
+  id: ID!
+  total: Float!
+  type: String!
+}
+
+type Mutation {
+  addExpenseToTrip(expenseId: String!, tripId: String!, userId: String!): Trip!
+  addNewUser(newUserDTO: NewUserDTO!): User!
+  createExpense(expenseData: NewExpenseDTO!, userId: String!): Expense!
+  createTrip(title: String!, userId: String!): Trip!
+}
+
+input NewExpenseDTO {
+  total: Float!
+  type: String!
+}
+
+input NewUserDTO {
+  age: Int!
+  firstname: String!
+  lastname: String!
+}
+
+type Query {
+  findManyByFirstname(firstname: String!): [User!]!
+  findManyByType(type: String!, userId: String!): [Expense!]!
+  getExpenseById(id: String!): Expense!
+  getExpenses(createdBy: String!): [Expense!]!
+  getTrips(userId: String!): [Trip!]!
+  getUserById(id: String!): User!
+}
+
+"""trips"""
+type Trip {
+  createdBy: ID!
+  createdDate: DateTime!
+  expenses: [ID!]!
+  id: ID!
+  title: String!
+}
+
+"""users"""
+type User {
+  age: Int!
+  createdDate: DateTime!
+  firstname: String!
+  id: ID!
+  lastname: String!
+}
