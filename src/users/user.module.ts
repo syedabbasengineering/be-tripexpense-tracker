@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
+import { UserService } from './user.service';
+import { UserController } from './user.controller';
 import { UserResolver } from './user.resolver';
-import { UserService } from './user.service'; // Ensure this is imported
-import { User, UserSchema } from './schemas/user.schema';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]), // Connect User model to MongoDB
-  ],
-  providers: [UserResolver, UserService], // Ensure UserService is registered as a provider
-  exports: [UserService], // Export UserService for use in other modules
+  imports: [TypeOrmModule.forFeature([User])],
+  controllers: [UserController],
+  providers: [UserService, UserResolver],
+  exports: [UserService, TypeOrmModule],
 })
 export class UserModule {}

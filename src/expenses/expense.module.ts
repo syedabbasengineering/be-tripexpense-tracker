@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ExpenseResolver } from './expense.resolver';
 import { ExpenseService } from './expense.service';
-import { UserService } from 'src/users/user.service';
+import { UserModule } from '../users/user.module';
 
 @Module({
-  providers: [ExpenseResolver, ExpenseService, UserService],
+  imports: [UserModule],
+  providers: [ExpenseResolver, ExpenseService],
 })
 export class ExpenseModule {}

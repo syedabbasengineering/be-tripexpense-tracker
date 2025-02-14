@@ -1,13 +1,16 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
 export class NewUserDTO {
-  @Field({ nullable: false })
-  firstname: string;
+  @Field()
+  firstName: string;
 
-  @Field({ nullable: false })
-  lastname: string;
+  @Field()
+  lastName: string;
 
-  @Field(() => Int)
-  age: number;
+  @Field()
+  email: string;
+
+  @Field()
+  password: string;
 }

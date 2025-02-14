@@ -18,9 +18,9 @@ type Expense {
 
 type Mutation {
   addExpenseToTrip(expenseId: String!, tripId: String!, userId: String!): Trip!
-  addNewUser(newUserDTO: NewUserDTO!): User!
   createExpense(expenseData: NewExpenseDTO!, userId: String!): Expense!
   createTrip(title: String!, userId: String!): Trip!
+  register(newUserDTO: NewUserDTO!): RegisterResponse!
 }
 
 input NewExpenseDTO {
@@ -29,9 +29,10 @@ input NewExpenseDTO {
 }
 
 input NewUserDTO {
-  age: Int!
-  firstname: String!
-  lastname: String!
+  email: String!
+  firstName: String!
+  lastName: String!
+  password: String!
 }
 
 type Query {
@@ -40,7 +41,12 @@ type Query {
   getExpenseById(id: String!): Expense!
   getExpenses(createdBy: String!): [Expense!]!
   getTrips(userId: String!): [Trip!]!
-  getUserById(id: String!): User!
+  getUserById(id: String!): User
+}
+
+type RegisterResponse {
+  token: String!
+  user: User!
 }
 
 """trips"""
@@ -52,11 +58,10 @@ type Trip {
   title: String!
 }
 
-"""users"""
 type User {
-  age: Int!
-  createdDate: DateTime!
-  firstname: String!
-  id: ID!
-  lastname: String!
+  email: String!
+  firstName: String!
+  id: Float!
+  lastName: String!
+  password: String!
 }

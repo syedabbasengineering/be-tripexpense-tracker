@@ -1,31 +1,26 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UserModule } from './users/user.module';
 import { ExpenseModule } from './expenses/expense.module';
 import { TripModule } from './trips/trip.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(), // Load environment variables
+    ConfigModule.forRoot(), // ✅ Ensure environment variables are loaded
 
-    MongooseModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGO_URI'),
-      }),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: process.env.POSTGRES_HOST,
+      port: Number(process.env.POSTGRES_PORT),
+      username: process.env.POSTGRES_USER,
+      password: process.env.POSTGRES_PASSWORD,
+      database: process.env.POSTGRES_DB,
+      autoLoadEntities: true,
+      synchronize: true, // ✅ Use only in development
     }),
-
-    // Import User, Expense, and Trip modules
-    UserModule,
-    ExpenseModule,
-    TripModule,
 
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -33,8 +28,10 @@ import { TripModule } from './trips/trip.module';
       autoSchemaFile: 'schema.gql',
       sortSchema: true,
     }),
+
+    UserModule,
+    ExpenseModule,
+    TripModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
